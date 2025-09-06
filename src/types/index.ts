@@ -9,26 +9,31 @@ export interface Person {
     boletimOcorrencia: string;
     status: 'DESAPARECIDA' | 'LOCALIZADA';
   };
-  caracteristicas: {
-    cor: string;
-    sexo: string;
-    olhos: string;
-    cabelos: string;
-    tipoFisico: string;
-    altura: string;
-    peso: string;
-    deficiencia: string;
-    acessorio: string;
-    cicatriz: string;
-    tatuagem: string;
-    outros: string;
-  };
+  caracteristicas?: Caracteristicas;
+  contato?: Contato;
   urlFoto: string;
-  contato: {
-    nome: string;
-    telefone: string;
-    email: string;
-  };
+
+}
+
+export interface Contato {
+  nome: string;
+  telefone: string;
+  email: string;
+}
+
+export interface Caracteristicas {
+  cor?: string;
+  sexo?: string;
+  olhos: string;
+  cabelos?: string;
+  tipoFisico?: string;
+  altura?: string;
+  peso?: string;
+  deficiencia?: string;
+  acessorio?: string;
+  cicatriz?: string;
+  tatuagem?: string;
+  outros?: string;
 }
 
 export interface ApiResponse<T> {
