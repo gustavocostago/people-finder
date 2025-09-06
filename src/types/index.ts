@@ -23,7 +23,7 @@ export interface Person {
     tatuagem: string;
     outros: string;
   };
-  foto: string;
+  urlFoto: string;
   contato: {
     nome: string;
     telefone: string;

@@ -1,17 +1,16 @@
 import axios from 'axios';
 import type { Person, ApiResponse, SearchParams } from '../types';
 
-const API_BASE_URL = 'https://abitus-api.gela.vip';
 
 const api = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: import.meta.env.VITE_API_URL,
   timeout: 10000,
 });
 
 export const personService = {
   async getPersons(params: SearchParams = {}): Promise<ApiResponse<Person>> {
     try {
-      const response = await api.get('/pessoas', { params });
+      const response = await api.get('/pessoas/aberto/filtro', { params });
       return response.data;
     } catch (error) {
       console.error('Erro ao buscar pessoas:', error);
