@@ -15,56 +15,57 @@ export const PersonCard = ({ person, onViewDetails }: PersonCardProps) => {
   const statusText = getStatusText(person.ultimaOcorrencia.status);
 
   return (
-    <Card className="h-full">
-      <div className="flex flex-col h-full">
-        <div className="flex justify-center mb-4">
-          <Image 
-            src={person.urlFoto || '/placeholder-person.jpg'} 
-            alt={person.nome} 
-            width="250"
-          />
-        </div>
-        
-        <div className="flex-1">
+    <Card className="h-full flex flex-col">
+      <div className="flex justify-center mb-4">
+        <Image
+          src={person.urlFoto}
+          alt={person.nome}
+          className="w-full h-full object-cover"
+          preview
+        />
+      </div>
+      
+      <div className="flex-1 flex flex-col justify-between">
+        <div>
           <h3 className="text-lg font-semibold mb-2 text-center">{person.nome}</h3>
           
-          <div className="space-y-2 mb-4">
+          <div className="space-y-2 mb-4 text-sm text-gray-700">
             <div className="flex justify-between">
-              <span className="text-sm text-gray-600">Idade:</span>
-              <span className="text-sm font-medium">
+              <span>Idade:</span>
+              <span className="font-medium">
                 {new Date().getFullYear() - new Date(person.dataNascimento).getFullYear()} anos
               </span>
             </div>
             
             <div className="flex justify-between">
-              <span className="text-sm text-gray-600">Desapareceu:</span>
-              <span className="text-sm font-medium">
-                {formatDate(person.ultimaOcorrencia.dtDesaparecimento)}
-              </span>
+              <span>Desapareceu:</span>
+              <span className="font-medium">{formatDate(person.ultimaOcorrencia.dtDesaparecimento)}</span>
             </div>
             
             <div className="flex justify-between">
-              <span className="text-sm text-gray-600">Local:</span>
-              <span className="text-sm font-medium truncate ml-2">
+              <span>Local:</span>
+              <span className="font-medium truncate ml-2">
                 {person.ultimaOcorrencia.localDesaparecimento}
               </span>
             </div>
           </div>
-          
-          <div className="flex justify-center mb-4">
+        </div>
+        
+        <div className="flex flex-col gap-3">
+          <div className="flex justify-center mb-2">
             <Tag
               value={statusText}
               className={`px-3 py-1 rounded-full text-xs font-medium ${statusColor}`}
             />
           </div>
+
+          <Button
+            label="Ver Detalhes"
+            icon="pi pi-eye"
+            className="w-full"
+            onClick={() => onViewDetails(person.id)}
+          />
         </div>
-        
-        <Button
-          label="Ver Detalhes"
-          icon="pi pi-eye"
-          className="w-full"
-          onClick={() => onViewDetails(person.id)}
-        />
       </div>
     </Card>
   );
