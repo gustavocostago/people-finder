@@ -2,6 +2,7 @@ import { Card } from 'primereact/card';
 import { Tag } from 'primereact/tag';
 import { Button } from 'primereact/button';
 import type { Person } from '../types';
+import { Image } from 'primereact/image';
 import { formatDate, getStatusColor, getStatusText } from '../utils/formatters';
 
 interface PersonCardProps {
@@ -17,13 +18,10 @@ export const PersonCard = ({ person, onViewDetails }: PersonCardProps) => {
     <Card className="h-full">
       <div className="flex flex-col h-full">
         <div className="flex justify-center mb-4">
-          <img
-            src={person.foto || '/placeholder-person.jpg'}
-            alt={person.nome}
-            className="w-32 h-32 object-cover rounded-lg"
-            onError={(e) => {
-              (e.target as HTMLImageElement).src = '/placeholder-person.jpg';
-            }}
+          <Image 
+            src={person.urlFoto || '/placeholder-person.jpg'} 
+            alt={person.nome} 
+            width="250"
           />
         </div>
         

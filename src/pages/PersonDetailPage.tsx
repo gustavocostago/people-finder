@@ -10,6 +10,7 @@ import { ContactForm } from '../components/ContactForm';
 import { personService } from '../services/api';
 import type { Person, ContactForm as ContactFormType } from '../types';
 import { formatDate, getStatusColor, getStatusText } from '../utils/formatters';
+import { Image } from 'primereact/image';
 
 export const PersonDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -111,13 +112,10 @@ export const PersonDetailPage = () => {
         <div className="lg:col-span-1">
           <Card>
             <div className="text-center">
-              <img
-                src={person.foto || '/placeholder-person.jpg'}
+              <Image
+                src={person.urlFoto || '/placeholder-person.jpg'}
                 alt={person.nome}
-                className="w-full max-w-sm mx-auto rounded-lg mb-4"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src = '/placeholder-person.jpg';
-                }}
+                width="250"
               />
               
               <h1 className="text-2xl font-bold text-gray-800 mb-2">
@@ -148,11 +146,11 @@ export const PersonDetailPage = () => {
                 </div>
                 <div>
                   <label className="text-sm font-medium text-gray-600">Sexo</label>
-                  <p className="text-gray-800">{person.caracteristicas.sexo}</p>
+                  <p className="text-gray-800">{person.caracteristicas?.sexo}</p>
                 </div>
                 <div>
                   <label className="text-sm font-medium text-gray-600">Cor</label>
-                  <p className="text-gray-800">{person.caracteristicas.cor}</p>
+                  <p className="text-gray-800">{person.caracteristicas?.cor}</p>
                 </div>
               </div>
             </Card>
@@ -161,38 +159,38 @@ export const PersonDetailPage = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="text-sm font-medium text-gray-600">Altura</label>
-                  <p className="text-gray-800">{person.caracteristicas.altura || 'Não informado'}</p>
+                  <p className="text-gray-800">{person.caracteristicas?.altura || 'Não informado'}</p>
                 </div>
                 <div>
                   <label className="text-sm font-medium text-gray-600">Peso</label>
-                  <p className="text-gray-800">{person.caracteristicas.peso || 'Não informado'}</p>
+                  <p className="text-gray-800">{person.caracteristicas?.peso || 'Não informado'}</p>
                 </div>
                 <div>
                   <label className="text-sm font-medium text-gray-600">Tipo Físico</label>
-                  <p className="text-gray-800">{person.caracteristicas.tipoFisico || 'Não informado'}</p>
+                  <p className="text-gray-800">{person.caracteristicas?.tipoFisico || 'Não informado'}</p>
                 </div>
                 <div>
                   <label className="text-sm font-medium text-gray-600">Cor dos Olhos</label>
-                  <p className="text-gray-800">{person.caracteristicas.olhos || 'Não informado'}</p>
+                  <p className="text-gray-800">{person.caracteristicas?.olhos || 'Não informado'}</p>
                 </div>
                 <div>
                   <label className="text-sm font-medium text-gray-600">Cor dos Cabelos</label>
-                  <p className="text-gray-800">{person.caracteristicas.cabelos || 'Não informado'}</p>
+                  <p className="text-gray-800">{person.caracteristicas?.cabelos || 'Não informado'}</p>
                 </div>
                 <div>
                   <label className="text-sm font-medium text-gray-600">Deficiência</label>
-                  <p className="text-gray-800">{person.caracteristicas.deficiencia || 'Não informado'}</p>
+                  <p className="text-gray-800">{person.caracteristicas?.deficiencia || 'Não informado'}</p>
                 </div>
               </div>
               
-              {(person.caracteristicas.acessorio || person.caracteristicas.cicatriz || person.caracteristicas.tatuagem || person.caracteristicas.outros) && (
+              {(person.caracteristicas?.acessorio || person.caracteristicas?.cicatriz || person.caracteristicas?.tatuagem || person.caracteristicas?.outros) && (
                 <>
                   <Divider />
                   <div className="space-y-2">
-                    {person.caracteristicas.acessorio && (
+                    {person.caracteristicas?.acessorio && (
                       <div>
                         <label className="text-sm font-medium text-gray-600">Acessórios</label>
-                        <p className="text-gray-800">{person.caracteristicas.acessorio}</p>
+                        <p className="text-gray-800">{person.caracteristicas?.acessorio}</p>
                       </div>
                     )}
                     {person.caracteristicas.cicatriz && (
@@ -239,15 +237,15 @@ export const PersonDetailPage = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="text-sm font-medium text-gray-600">Nome do Contato</label>
-                  <p className="text-gray-800">{person.contato.nome}</p>
+                  <p className="text-gray-800">{person.contato?.nome}</p>
                 </div>
                 <div>
                   <label className="text-sm font-medium text-gray-600">Telefone</label>
-                  <p className="text-gray-800">{person.contato.telefone}</p>
+                  <p className="text-gray-800">{person.contato?.telefone}</p>
                 </div>
                 <div className="md:col-span-2">
                   <label className="text-sm font-medium text-gray-600">Email</label>
-                  <p className="text-gray-800">{person.contato.email}</p>
+                  <p className="text-gray-800">{person.contato?.email}</p>
                 </div>
               </div>
             </Card>
