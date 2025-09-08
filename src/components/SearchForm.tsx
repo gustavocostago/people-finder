@@ -69,7 +69,6 @@ export const SearchForm = ({ onSearch, loading = false }: SearchFormProps) => {
             dateFormat="dd/mm/yy"
             placeholder="Selecione a data"
             className="w-full"
-            showIcon
           />
         </div>
 
@@ -87,7 +86,6 @@ export const SearchForm = ({ onSearch, loading = false }: SearchFormProps) => {
             dateFormat="dd/mm/yy"
             placeholder="Selecione a data"
             className="w-full"
-            showIcon
           />
         </div>
 
@@ -111,7 +109,10 @@ export const SearchForm = ({ onSearch, loading = false }: SearchFormProps) => {
           type="submit"
           label="Buscar"
           icon="pi pi-search"
+          severity="secondary"
           loading={loading}
+          rounded
+          outlined
           className="flex-1"
         />
         <Button
@@ -119,6 +120,8 @@ export const SearchForm = ({ onSearch, loading = false }: SearchFormProps) => {
           label="Limpar"
           icon="pi pi-times"
           severity="secondary"
+          rounded
+          outlined
           onClick={handleClear}
           className="flex-1"
         />

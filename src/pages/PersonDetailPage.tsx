@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Card } from 'primereact/card';
-import { Tag } from 'primereact/tag';
 import { Button } from 'primereact/button';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import { Message } from 'primereact/message';
@@ -93,8 +92,8 @@ export const PersonDetailPage = () => {
     );
   }
 
-  const statusColor = getStatusColor(person.ultimaOcorrencia.status);
-  const statusText = getStatusText(person.ultimaOcorrencia.status);
+  const statusColor = getStatusColor(person.ultimaOcorrencia.status ?? 'DESAPARECIDA');
+  const statusText = getStatusText(person.ultimaOcorrencia.status ?? 'DESAPARECIDA');
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -111,9 +110,9 @@ export const PersonDetailPage = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-1">
           <Card>
-            <div className="text-center">
+            <div className="flex flex-col gap-4 items-center justify-center">
               <Image
-                src={person.urlFoto || '/placeholder-person.jpg'}
+                src={person.urlFoto || '/src/assets/not-found.jpg'}
                 alt={person.nome}
                 width="250"
               />
@@ -122,10 +121,7 @@ export const PersonDetailPage = () => {
                 {person.nome}
               </h1>
               
-              <Tag
-                value={statusText}
-                className={`px-4 py-2 rounded-full text-sm font-medium ${statusColor}`}
-              />
+              <span className={`px-3 py-1 rounded-full text-xs font-medium ${statusColor}`}>{statusText}</span>
             </div>
           </Card>
         </div>
@@ -141,12 +137,12 @@ export const PersonDetailPage = () => {
                 <div>
                   <label className="text-sm font-medium text-gray-600">Idade</label>
                   <p className="text-gray-800">
-                    {new Date().getFullYear() - new Date(person.dataNascimento).getFullYear()} anos
+                    {person.idade} anos
                   </p>
                 </div>
                 <div>
                   <label className="text-sm font-medium text-gray-600">Sexo</label>
-                  <p className="text-gray-800">{person.caracteristicas?.sexo}</p>
+                  <p className="text-gray-800">{person.sexo}</p>
                 </div>
                 <div>
                   <label className="text-sm font-medium text-gray-600">Cor</label>
@@ -224,7 +220,7 @@ export const PersonDetailPage = () => {
                 </div>
                 <div>
                   <label className="text-sm font-medium text-gray-600">Local do Desaparecimento</label>
-                  <p className="text-gray-800">{person.ultimaOcorrencia.localDesaparecimento}</p>
+                  <p className="text-gray-800">{person.ultimaOcorrencia.localDesaparecimentoConcat}</p>
                 </div>
                 <div>
                   <label className="text-sm font-medium text-gray-600">Boletim de Ocorrência</label>
@@ -263,6 +259,8 @@ export const PersonDetailPage = () => {
                   icon="pi pi-send"
                   onClick={() => setShowContactForm(true)}
                   size="large"
+                  severity="secondary"
+                  outlined
                 />
               </div>
             </Card>

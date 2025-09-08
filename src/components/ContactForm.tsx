@@ -202,14 +202,17 @@ export const ContactForm = ({ visible, onHide, onSubmit, loading = false }: Cont
             icon="pi pi-send"
             loading={loading}
             className="flex-1"
+            severity="secondary"
+            outlined
           />
           <Button
             type="button"
             label="Cancelar"
             icon="pi pi-times"
-            severity="secondary"
             onClick={handleHide}
-            className="flex-1"
+            className="flex-1"  
+            severity="danger"
+            outlined
           />
         </div>
       </form>
