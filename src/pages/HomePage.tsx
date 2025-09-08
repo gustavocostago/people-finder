@@ -24,8 +24,8 @@ export const HomePage = () => {
     try {
       const response = await personService.getPersons({
         ...params,
-        page: currentPage,
-        size: pageSize,
+        pagina: currentPage,
+        porPagina: pageSize,
       });
       setPersons(response.content);
       setTotalRecords(response.totalElements);
@@ -56,7 +56,7 @@ export const HomePage = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
-      {/* Header */}
+      
       <div className="text-center mb-8">
         <h1 className="text-4xl sm:text-5xl font-bold text-gray-800 mb-2">
           Pessoas Desaparecidas
@@ -66,22 +66,20 @@ export const HomePage = () => {
         </p>
       </div>
 
-      {/* Search Form */}
+     
       <SearchForm onSearch={handleSearch} loading={loading} />
 
-      {/* Error */}
       {error && (
         <Message severity="error" text={error} className="mb-6" />
       )}
 
-      {/* Loading */}
       {loading ? (
         <div className="flex justify-center items-center py-12">
           <ProgressSpinner />
         </div>
       ) : (
         <>
-          {/* Total Records */}
+          
           <div className="mb-6">
             <p className="text-gray-600">
               {totalRecords > 0
@@ -90,7 +88,7 @@ export const HomePage = () => {
             </p>
           </div>
 
-          {/* Cards */}
+          
           {persons.length > 0 ? (
             <>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-6">
@@ -103,7 +101,7 @@ export const HomePage = () => {
                 ))}
               </div>
 
-              {/* Paginator */}
+              
               <Paginator
                 first={currentPage * pageSize}
                 rows={pageSize}

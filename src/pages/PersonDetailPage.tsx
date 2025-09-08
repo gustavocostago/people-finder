@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Card } from 'primereact/card';
 import { Button } from 'primereact/button';
 import { ProgressSpinner } from 'primereact/progressspinner';
+import { Toast } from 'primereact/toast';
 import { Message } from 'primereact/message';
 import { Divider } from 'primereact/divider';
 import { ContactForm } from '../components/ContactForm';
@@ -19,6 +20,7 @@ export const PersonDetailPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [showContactForm, setShowContactForm] = useState(false);
   const [submittingInfo, setSubmittingInfo] = useState(false);
+  const toast = useRef<Toast>(null);
 
   useEffect(() => {
     if (id) {
@@ -45,12 +47,9 @@ export const PersonDetailPage = () => {
     
     try {
       const submitData = new FormData();
-      submitData.append('pessoaId', id || '');
-      submitData.append('nome', formData.nome);
-      submitData.append('telefone', formData.telefone);
-      submitData.append('email', formData.email);
-      submitData.append('localizacao', formData.localizacao);
+      submitData.append('ocoId', person?.ultimaOcorrencia.ocoId.toString() || '');
       submitData.append('observacoes', formData.observacoes);
+      submitData.append('dataVisto', formData.dataVisto?.toISOString().split('T')[0] || '');
       
       if (formData.foto) {
         submitData.append('foto', formData.foto);
@@ -59,9 +58,17 @@ export const PersonDetailPage = () => {
       await personService.submitInformation(submitData);
       setShowContactForm(false);
       
-      alert('Informações enviadas com sucesso!');
+      toast.current?.show({
+        severity: 'success',
+        summary: 'Informações enviadas com sucesso!',
+        detail: 'Informações enviadas com sucesso!',
+      });
     } catch (err) {
-      alert('Erro ao enviar informações. Tente novamente.');
+      toast.current?.show({
+        severity: 'error',
+        summary: 'Erro ao enviar informações. Tente novamente.',
+        detail: 'Erro ao enviar informações. Tente novamente.',
+      });
     } finally {
       setSubmittingInfo(false);
     }
@@ -97,6 +104,7 @@ export const PersonDetailPage = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <Toast ref={toast} />
       <div className="mb-6">
         <Button
           label="Voltar"
@@ -117,7 +125,7 @@ export const PersonDetailPage = () => {
                 width="250"
               />
               
-              <h1 className="text-2xl font-bold text-gray-800 mb-2">
+              <h1 className="text-2xl font-bold text-gray-800 mb-2 text-center">
                 {person.nome}
               </h1>
               

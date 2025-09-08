@@ -12,67 +12,16 @@ Uma Single Page Application (SPA) desenvolvida em React + TypeScript para consul
 - **Axios** para requisições HTTP
 - **Docker** para containerização
 
-## 📦 Instalação
-
-### Pré-requisitos
-
-- Node.js 20+ 
-- npm ou yarn
-- Docker (opcional)
-
-### Instalação Local
-
-1. Clone o repositório:
-```bash
-git clone [URL_DO_REPOSITORIO]
-cd desenvolve-mt
-```
-
-2. Instale as dependências:
-```bash
-npm install
-```
-
-3. Execute o projeto em modo de desenvolvimento:
-```bash
-npm run dev
-```
-
-4. Acesse a aplicação em: `http://localhost:5173`
-
-### Build para Produção
-
-```bash
-npm run build
-```
-
 ## 🐳 Execução com Docker
 
 ### Usando Docker Compose (Recomendado)
 
 ```bash
-docker-compose up --build
-```
-
-### Usando Docker
-
-```bash
-docker build -t pessoas-desaparecidas .
-docker run -p 3000:80 pessoas-desaparecidas
+docker-compose up -d
 ```
 
 A aplicação estará disponível em: `http://localhost:3000`
 
-## 🧪 Testes
 
-### Executar Testes
-
-```bash
-npm run test
-```
-
-### Executar Lint
-
-```bash
-npm run lint
-```
+Gustavo Costa
+gustavocosta.cba@gmail.com
