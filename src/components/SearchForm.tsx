@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { InputText } from 'primereact/inputtext';
-import { Calendar } from 'primereact/calendar';
+import { InputNumber } from 'primereact/inputnumber';
 import { Dropdown } from 'primereact/dropdown';
 import { Button } from 'primereact/button';
 import type { SearchParams } from '../types';
@@ -12,16 +12,23 @@ interface SearchFormProps {
 
 export const SearchForm = ({ onSearch, loading = false }: SearchFormProps) => {
   const [searchParams, setSearchParams] = useState<SearchParams>({
-    nome: '',
-    dataNascimento: undefined,
-    dataDesaparecimento: undefined,
+    nome: undefined,
+    faixaIdadeInicial: undefined,
+    faixaIdadeFinal: undefined,
+    sexo: undefined,
     status: undefined,
   });
 
   const statusOptions = [
     { label: 'Todas', value: undefined },
-    { label: 'Desaparecida', value: 'DESAPARECIDA' },
-    { label: 'Localizada', value: 'LOCALIZADA' },
+    { label: 'Desaparecida', value: 'DESAPARECIDO' },
+    { label: 'Localizada', value: 'LOCALIZADO' },
+  ];
+
+  const sexoOptions = [
+    { label: 'Todos', value: undefined },
+    { label: 'Masculino', value: 'MASCULINO' },
+    { label: 'Feminino', value: 'FEMININO' },
   ];
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -32,8 +39,9 @@ export const SearchForm = ({ onSearch, loading = false }: SearchFormProps) => {
   const handleClear = () => {
     setSearchParams({
       nome: '',
-      dataNascimento: undefined,
-      dataDesaparecimento: undefined,
+      faixaIdadeInicial: undefined,
+      faixaIdadeFinal: undefined,
+      sexo: undefined,
       status: undefined,
     });
     onSearch({});
@@ -56,35 +64,14 @@ export const SearchForm = ({ onSearch, loading = false }: SearchFormProps) => {
         </div>
 
         <div className="flex flex-col">
-          <label htmlFor="dataNascimento" className="text-sm font-medium text-gray-700 mb-1">
-            Data de Nascimento
+          <label htmlFor="faixaIdadeInicial" className="text-sm font-medium text-gray-700 mb-1">
+            Idade
           </label>
-          <Calendar
-            id="dataNascimento"
-            value={searchParams.dataNascimento ? new Date(searchParams.dataNascimento) : null}
-            onChange={(e) => setSearchParams({ 
-              ...searchParams, 
-              dataNascimento: e.value ? e.value.toISOString().split('T')[0] : undefined 
-            })}
-            dateFormat="dd/mm/yy"
-            placeholder="Selecione a data"
-            className="w-full"
-          />
-        </div>
-
-        <div className="flex flex-col">
-          <label htmlFor="dataDesaparecimento" className="text-sm font-medium text-gray-700 mb-1">
-            Data de Desaparecimento
-          </label>
-          <Calendar
-            id="dataDesaparecimento"
-            value={searchParams.dataDesaparecimento ? new Date(searchParams.dataDesaparecimento) : null}
-            onChange={(e) => setSearchParams({ 
-              ...searchParams, 
-              dataDesaparecimento: e.value ? e.value.toISOString().split('T')[0] : undefined 
-            })}
-            dateFormat="dd/mm/yy"
-            placeholder="Selecione a data"
+          <InputNumber
+            id="faixaIdadeInicial"
+            value={searchParams.faixaIdadeInicial}
+            onChange={(e) => setSearchParams({ ...searchParams, faixaIdadeInicial: e.value || undefined })}
+            placeholder="Digite a faixa de idade"
             className="w-full"
           />
         </div>
@@ -99,6 +86,20 @@ export const SearchForm = ({ onSearch, loading = false }: SearchFormProps) => {
             options={statusOptions}
             onChange={(e) => setSearchParams({ ...searchParams, status: e.value })}
             placeholder="Selecione o status"
+            className="w-full"
+          />
+        </div>
+
+        <div className="flex flex-col">
+          <label htmlFor="sexo" className="text-sm font-medium text-gray-700 mb-1">
+            Sexo
+          </label>
+          <Dropdown
+            id="sexo"
+            value={searchParams.sexo}
+            options={sexoOptions}
+            onChange={(e) => setSearchParams({ ...searchParams, sexo: e.value })}
+            placeholder="Selecione o sexo"
             className="w-full"
           />
         </div>

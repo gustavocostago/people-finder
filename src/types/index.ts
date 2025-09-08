@@ -9,6 +9,7 @@ export interface Person {
     localDesaparecimentoConcat: string;
     boletimOcorrencia: string;
     status: 'DESAPARECIDA' | 'LOCALIZADA';
+    ocoId: number;
   };
   sexo?: string;
   caracteristicas?: Caracteristicas;
@@ -50,17 +51,19 @@ export interface ApiResponse<T> {
 
 export interface SearchParams {
   nome?: string;
-  dataNascimento?: string;
-  dataDesaparecimento?: string;
-  status?: string;
-  page?: number;
-  size?: number;
+  faixaIdadeInicial?: number;
+  faixaIdadeFinal?: number;
+  sexo?: 'MASCULINO' | 'FEMININO';
+  status?: 'DESAPARECIDO' | 'LOCALIZADO';
+  pagina?: number;
+  porPagina?: number;
 }
 
 export interface ContactForm {
   nome: string;
   telefone: string;
   email: string;
+  dataVisto: Date | null;
   localizacao: string;
   observacoes: string;
   foto?: File;

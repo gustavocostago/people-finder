@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import axios from 'axios';
+import multer from 'multer';
 import { config } from './config.js';
 
 
@@ -11,6 +12,21 @@ app.use(cors(config.cors));
 
 app.use(express.json());
 
+const storage = multer.memoryStorage();
+const upload = multer({ 
+  storage,
+  limits: {
+    fileSize: 5 * 1024 * 1024, // 5MB
+  },
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Apenas arquivos de imagem são permitidos'), false);
+    }
+  }
+});
+
 
 const makeApiRequest = async (method, endpoint, data = null, headers = {}) => {
   try {
@@ -19,7 +35,6 @@ const makeApiRequest = async (method, endpoint, data = null, headers = {}) => {
       url: `${config.apiBaseUrl}${endpoint}`,
       timeout: config.apiTimeout,
       headers: {
-        'Content-Type': 'application/json',
         ...headers
       }
     };
@@ -66,6 +81,66 @@ app.get('/api/pessoas/:id', async (req, res) => {
   }
 });
 
+app.post('/api/informacoes', upload.single('foto'), async (req, res) => {
+  try {
+    const { ocoId, observacoes, dataVisto } = req.body;
+    const foto = req.file;
+
+    if (!ocoId || !observacoes || !dataVisto) {
+      return res.status(400).json({
+        error: 'Campos obrigatórios não preenchidos',
+        message: 'Pessoa ID e observações são obrigatórios'
+      });
+    }
+    
+    const formData = new FormData();
+
+    if (foto) {
+        formData.append('files', foto.buffer, {
+          filename: foto.originalname,
+          contentType: foto.mimetype,
+        });
+    }
+
+    const ocoIdNumber = parseInt(ocoId);
+    const descricao = foto ? 'imagem' : 'descricao';
+
+    const queryParams = new URLSearchParams({
+      ocoId: String(ocoIdNumber),
+      informacao: observacoes,
+      data: dataVisto,
+      ...(descricao ? { descricao } : {})
+    }).toString();
+
+    const endpoint = `/ocorrencias/informacoes-desaparecido?${queryParams}`;
+
+    const data = await makeApiRequest(
+      'POST', 
+      endpoint, 
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          accept: '*/*',
+        },
+      }
+    );
+
+    res.json({
+      success: true,
+      message: 'Informações enviadas com sucesso',
+      data: data
+    });
+
+  } catch (error) {
+    console.error('Erro ao enviar informações:', error.message);
+    res.status(500).json({ 
+      error: 'Erro ao enviar informações',
+      message: error.message 
+    });
+  }
+});
+
 app.get('/api/health', (req, res) => {
   res.json({ 
     status: 'OK', 
@@ -82,6 +157,26 @@ app.use('*', (req, res) => {
 });
 
 app.use((error, req, res, next) => {
+  if (error instanceof multer.MulterError) {
+    if (error.code === 'LIMIT_FILE_SIZE') {
+      return res.status(400).json({
+        error: 'Arquivo muito grande',
+        message: 'O arquivo deve ter no máximo 5MB'
+      });
+    }
+    return res.status(400).json({
+      error: 'Erro no upload do arquivo',
+      message: error.message
+    });
+  }
+  
+  if (error.message === 'Apenas arquivos de imagem são permitidos') {
+    return res.status(400).json({
+      error: 'Tipo de arquivo inválido',
+      message: 'Apenas arquivos de imagem são permitidos'
+    });
+  }
+
   console.error('Erro no servidor:', error);
   res.status(500).json({ 
     error: 'Erro interno do servidor',
