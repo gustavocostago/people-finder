@@ -1,10 +1,25 @@
 version: '3.8'
 
 services:
-  app:
+  backend:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+      - API_BASE_URL=https://abitus-api.geia.vip/v1
+    restart: unless-stopped
+
+  frontend:
     build: .
     ports:
       - "3000:80"
     environment:
       - NODE_ENV=production
+      - VITE_API_URL=http://backend:3001/api
+    depends_on:
+      - backend
     restart: unless-stopped
