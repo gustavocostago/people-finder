@@ -3,14 +3,14 @@ import type { Person, ApiResponse, SearchParams } from '../types';
 
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3001/api',
   timeout: 10000,
 });
 
 export const personService = {
   async getPersons(params: SearchParams = {}): Promise<ApiResponse<Person>> {
     try {
-      const response = await api.get('/pessoas/aberto/filtro', { params });
+      const response = await api.get('/pessoas/aberto/filtro', { params});
       return response.data;
     } catch (error) {
       console.error('Erro ao buscar pessoas:', error);

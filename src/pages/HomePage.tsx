@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { DataView } from 'primereact/dataview';
 import { Paginator } from 'primereact/paginator';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import { Message } from 'primereact/message';
@@ -22,14 +21,12 @@ export const HomePage = () => {
   const loadPersons = async (params: SearchParams = {}) => {
     setLoading(true);
     setError(null);
-    
     try {
       const response = await personService.getPersons({
         ...params,
         page: currentPage,
         size: pageSize,
       });
-      
       setPersons(response.content);
       setTotalRecords(response.totalElements);
     } catch (err) {
@@ -57,59 +54,56 @@ export const HomePage = () => {
     navigate(`/person/${id}`);
   };
 
-  const itemTemplate = (person: Person) => (
-    <PersonCard
-      key={person.id}
-      person={person}
-      onViewDetails={handleViewDetails}
-    />
-  );
-
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="max-w-7xl mx-auto px-4 py-8">
+      {/* Header */}
       <div className="text-center mb-8">
-        <h1 className="text-4xl font-bold text-gray-800 mb-2">
+        <h1 className="text-4xl sm:text-5xl font-bold text-gray-800 mb-2">
           Pessoas Desaparecidas
         </h1>
-        <p className="text-gray-600">
+        <p className="text-gray-600 text-lg">
           Ajude a encontrar pessoas desaparecidas em Mato Grosso
         </p>
       </div>
 
+      {/* Search Form */}
       <SearchForm onSearch={handleSearch} loading={loading} />
 
+      {/* Error */}
       {error && (
-        <Message
-          severity="error"
-          text={error}
-          className="mb-6"
-        />
+        <Message severity="error" text={error} className="mb-6" />
       )}
 
+      {/* Loading */}
       {loading ? (
         <div className="flex justify-center items-center py-12">
           <ProgressSpinner />
         </div>
       ) : (
         <>
+          {/* Total Records */}
           <div className="mb-6">
             <p className="text-gray-600">
-              {totalRecords > 0 
-                ? `Encontradas ${totalRecords} pessoas` 
-                : 'Nenhuma pessoa encontrada'
-              }
+              {totalRecords > 0
+                ? `Encontradas ${totalRecords} pessoas`
+                : 'Nenhuma pessoa encontrada'}
             </p>
           </div>
 
+          {/* Cards */}
           {persons.length > 0 ? (
             <>
-              <DataView
-                value={persons}
-                itemTemplate={itemTemplate}
-                layout="grid"
-                className="mb-6"
-              />
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-6">
+                {persons.map((person) => (
+                  <PersonCard
+                    key={person.id}
+                    person={person}
+                    onViewDetails={handleViewDetails}
+                  />
+                ))}
+              </div>
 
+              {/* Paginator */}
               <Paginator
                 first={currentPage * pageSize}
                 rows={pageSize}
@@ -118,6 +112,7 @@ export const HomePage = () => {
                 template="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                 currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
                 rowsPerPageOptions={[10, 20, 50]}
+                className="flex justify-center"
               />
             </>
           ) : (

@@ -1,14 +1,16 @@
 export interface Person {
   id: number;
   nome: string;
+  idade: number;
   dataNascimento: string;
   dataDesaparecimento: string;
   ultimaOcorrencia: {
     dtDesaparecimento: string;
-    localDesaparecimento: string;
+    localDesaparecimentoConcat: string;
     boletimOcorrencia: string;
     status: 'DESAPARECIDA' | 'LOCALIZADA';
   };
+  sexo?: string;
   caracteristicas?: Caracteristicas;
   contato?: Contato;
   urlFoto: string;
